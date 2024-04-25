@@ -1,13 +1,5 @@
 const bcrypt = require('bcrypt');
 
-const isValidPassword = async (password, hash) => {
-  try {
-    return bcrypt.compare(password, hash);
-  } catch (err) {
-    return console.error(err.message);
-  }
-};
-
 const hashPassword = async (password, saltRounds = 8) => {
   try {
     return bcrypt.hash(password, saltRounds);
@@ -16,9 +8,16 @@ const hashPassword = async (password, saltRounds = 8) => {
   }
 };
 
+const isValidPassword = async (password, hash) => {
+  try {
+    return bcrypt.compare(password, hash);
+  } catch (err) {
+    return console.error(err.message);
+  }
+};
+
+
 const tester = async (plainTextPassword, saltRounds = 8, shouldMatch = true) => {
-
-
   const hashedPassword = await hashPassword(plainTextPassword, saltRounds);
   console.log(hashedPassword);
   const [algorithm, cost, body] = hashedPassword.split('$').slice(1);

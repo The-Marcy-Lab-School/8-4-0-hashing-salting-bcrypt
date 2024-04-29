@@ -9,9 +9,9 @@
 
 ## Terms
 * **Hashing** - a mathematical algorithm that transforms a string of characters into a fixed-length string of characters. 
-* Salting
-* Salt Rounds
-* Plaintext password vs. hashed password
+* **Password Salt** - A salt is a random string of data that is added to the input data before the hash function is applied. This changes the hash value that is produced, even for the same input data.
+* **Salt Rounds** - the number of times a password has been salted before being hashed
+* **Plaintext password** - the password as it was entered by the user, before it is hashed.
 
 ## Hashing
 
@@ -84,7 +84,6 @@ authenticate('abc1234', users[1]); // false
 ```
 
 ## Salting
-
 
 A salt is a random string of data that is added to the input data before the hash function is applied. This changes the hash value that is produced, even for the same input data.
 

@@ -2,6 +2,7 @@
 
 **Table of Contents:**
 - [Terms](#terms)
+- [Pre-Learning](#pre-learning)
 - [Hashing](#hashing)
   - [Verifying Passwords](#verifying-passwords)
 - [Salting](#salting)
@@ -12,6 +13,12 @@
 * **Password Salt** - A salt is a random string of data that is added to the input data before the hash function is applied. This changes the hash value that is produced, even for the same input data.
 * **Salt Rounds** - the number of times a password has been salted before being hashed
 * **Plaintext password** - the password as it was entered by the user, before it is hashed.
+
+## Pre-Learning
+
+Check out this video to learn about hashing, salting, and various attacks used by hackers to get accessed to your password! 
+
+[Video: Password Hashing, Salts, Peppers | Explained!](https://www.youtube.com/watch?v=--tnZMuoK3E&ab_channel=Seytonic)
 
 ## Hashing
 

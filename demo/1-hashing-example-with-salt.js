@@ -1,9 +1,9 @@
 const users = []; // our "database"
+const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+const alphabetUpper = alphabet.toUpperCase();
 
 // a hashing function is one that turns a string into another string
-const hash = (plaintextPassword, salt) => {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  const alphabetUpper = alphabet.toUpperCase();
+const hash = (plaintextPassword) => {
 
   const hashedPassword = [...plaintextPassword].map((char) => {
     if (!alphabet.includes(char) && !alphabetUpper.includes(char)) {
@@ -15,36 +15,40 @@ const hash = (plaintextPassword, salt) => {
     return alphabetUpper[(alphabetUpper.indexOf(char) + 1 % 26)]
   }).join('');
 
-  // this is used when using the hashing function to compare
-  if (salt) return salt + hashedPassword;
+  return hashedPassword;
+}
 
-  // generate a new salt when creating a user's hashed password
+// A salt is a random string of data that is added to the 
+// input data before the hash function is applied. This changes 
+// the hash value that is produced, even for the same input data.
+const getSalt = () => {
+  // this salt is just a random string of 3 letters from alphabet
   let randomSalt = '';
   for (let i = 0; i < 3; i++) {
     randomSalt += alphabet[Math.floor(Math.random() * alphabet.length)];
   }
-
-  return randomSalt + hashedPassword;
+  return randomSalt;
 }
 
 const createNewUser = (username, password) => {
-  const hashedPassword = hash(password);
-  const user = { username, hashedPassword }
+  const salt = getSalt();
+  const hashedPassword = hash(salt + password);
+  // store the salt along with the hashed password
+  // hackers still need 
+  const user = { username, hashedPassword, salt };
   users.push(user);
 }
 
-const compare = (passwordAttempt, hashedPassword) => {
-  // get the salt from the beginning of the hashed password
-  const salt = hashedPassword.slice(0, 3);
+const authenticate = (passwordAttempt, user) => {
   // use the salt to hash the password attempt and compare
-  return hash(passwordAttempt, salt) === hashedPassword;
+  return hash(user.salt + passwordAttempt) === user.hashedPassword;
 }
 
 createNewUser('dogPerson123', 'abc')
 createNewUser('catsRule678', 'abc')
 console.log(users)
 
-const attempt1 = compare('abc', users[0].hashedPassword);
-const attempt2 = compare('abc', users[1].hashedPassword);
+const attempt1 = authenticate('abc', users[0]);
+const attempt2 = authenticate('abc', users[1]);
 console.log('attempt1 is valid:', attempt1);
 console.log('attempt2 is valid:', attempt2);

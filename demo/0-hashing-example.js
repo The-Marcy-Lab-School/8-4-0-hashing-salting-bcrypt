@@ -1,9 +1,9 @@
 const users = []; // our "database"
+const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+const alphabetUpper = alphabet.toUpperCase();
 
 // a hashing function is one that turns a string into another string
 const hash = (plaintextPassword) => {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  const alphabetUpper = alphabet.toUpperCase();
 
   const hashedPassword = [...plaintextPassword].map((char) => {
     if (!alphabet.includes(char) && !alphabetUpper.includes(char)) {
@@ -24,16 +24,16 @@ const createNewUser = (username, password) => {
   users.push(user);
 }
 
-const compare = (passwordAttempt, hashedPassword) => {
-  return hash(passwordAttempt) === hashedPassword;
+const authenticate = (passwordAttempt, user) => {
+  return hash(passwordAttempt) === user.hashedPassword;
 }
 
 createNewUser('dogPerson123', 'hElLo123')
 createNewUser('catsRule678', 'abc123')
 console.log(users)
 
-const attempt1 = compare('abc123', users[1].hashedPassword);
-const attempt2 = compare('abc1234', users[1].hashedPassword);
+const attempt1 = authenticate('abc123', users[1]);
+const attempt2 = authenticate('abc1234', users[1]);
 console.log('attempt1 is valid:', attempt1);
 console.log('attempt2 is valid:', attempt2);
 

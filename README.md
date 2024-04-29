@@ -17,6 +17,8 @@
 
 **Hashing** is a mathematical algorithm that transforms a string of characters into a fixed-length string of characters. 
 
+![alt text](./img/hashing.png)
+
 The purpose of password hashing is to prevent attackers who obtain a database of user passwords from easily obtaining the passwords themselves. 
 * Without password hashing, an attacker who obtains a user database can simply read the passwords in plain text. 
 * With password hashing, the passwords are stored as **hash values**, and an attacker would need to spend significant time and resources attempting to crack the hash values back into the original passwords.
@@ -69,58 +71,53 @@ const createNewUser = (username, password) => {
 
 // take a password attempt and hash it.
 // if the same result is produced as the hashed password, its a match!
-const compare = (passwordAttempt, hashedPassword) => {
-  return hash(passwordAttempt) === hashedPassword;
+const authenticate = (passwordAttempt, user) => {
+  return hash(passwordAttempt) === user.hashedPassword;
 }
 
 createNewUser('dogPerson123', 'hElLo123')
 createNewUser('catsRule678', 'abc123')
 console.log(users);
 
-compare('abc123', users[1].hashedPassword); // true
-compare('abc1234', users[1].hashedPassword); // false
+authenticate('abc123', users[1]); // true
+authenticate('abc1234', users[1]); // false
 ```
 
 ## Salting
 
+
 A salt is a random string of data that is added to the input data before the hash function is applied. This changes the hash value that is produced, even for the same input data.
+
+![alt text](./img/without-salting.png)
+![alt text](./img/with-salting.png)
 
 Even if two users have the same password, a new salt will be generated and added to the password, generating a unique hash each time. 
 
 ```js
-// a hashing function is one that turns a string into another string
-const hash = (plaintextPassword, salt) => {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  const alphabetUpper = alphabet.toUpperCase();
-
-  const hashedPassword = [...plaintextPassword].map((char) => {
-    if (!alphabet.includes(char) && !alphabetUpper.includes(char)) {
-      return char;
-    }
-    if (alphabet.includes(char)) {
-      return alphabet[(alphabet.indexOf(char) + 1 % 26)]
-    }
-    return alphabetUpper[(alphabetUpper.indexOf(char) + 1 % 26)]
-  }).join('');
-
-  // this is used when using the hashing function to compare
-  if (salt) return salt + hashedPassword;
-
-  // generate a new salt when creating a user's hashed password
-  // the salt will always be a random sequence of 3 lowercase letters
+// A salt is a random string of data that is added to the 
+// input data before the hash function is applied. This changes 
+// the hash value that is produced, even for the same input data.
+const getSalt = () => {
+  // this salt is just a random string of 3 letters from alphabet
   let randomSalt = '';
   for (let i = 0; i < 3; i++) {
     randomSalt += alphabet[Math.floor(Math.random() * alphabet.length)];
   }
-
-  return randomSalt + hashedPassword;
+  return randomSalt;
 }
-const compare = (passwordAttempt, hashedPassword) => {
-  // get the salt from the beginning of the hashed password
-  // we know that it is the first three letters of the hashed password
-  const salt = hashedPassword.slice(0, 3);
+
+const createNewUser = (username, password) => {
+  const salt = getSalt();
+  const hashedPassword = hash(salt + password);
+  // store the salt along with the hashed password
+  // hackers still need 
+  const user = { username, hashedPassword, salt };
+  users.push(user);
+}
+
+const authenticate = (passwordAttempt, user) => {
   // use the salt to hash the password attempt and compare
-  return hash(passwordAttempt, salt) === hashedPassword;
+  return hash(user.salt + passwordAttempt) === user.hashedPassword;
 }
 ```
 

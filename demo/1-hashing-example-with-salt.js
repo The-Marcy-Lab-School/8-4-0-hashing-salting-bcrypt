@@ -4,15 +4,14 @@ const alphabetUpper = alphabet.toUpperCase();
 
 // a hashing function is one that turns a string into another string
 const hash = (plaintextPassword) => {
-
   const hashedPassword = [...plaintextPassword].map((char) => {
     if (!alphabet.includes(char) && !alphabetUpper.includes(char)) {
       return char;
     }
     if (alphabet.includes(char)) {
-      return alphabet[(alphabet.indexOf(char) + 1 % 26)]
+      return alphabet[((alphabet.indexOf(char) + 1) % 26)]
     }
-    return alphabetUpper[(alphabetUpper.indexOf(char) + 1 % 26)]
+    return alphabetUpper[((alphabetUpper.indexOf(char) + 1) % 26)]
   }).join('');
 
   return hashedPassword;
@@ -30,11 +29,15 @@ const getSalt = () => {
   return randomSalt;
 }
 
+console.log(getSalt())
+console.log(getSalt())
+console.log(getSalt())
+
 const createNewUser = (username, password) => {
   const salt = getSalt();
   const hashedPassword = hash(salt + password);
+
   // store the salt along with the hashed password
-  // hackers still need 
   const user = { username, hashedPassword, salt };
   users.push(user);
 }
@@ -46,9 +49,9 @@ const authenticate = (passwordAttempt, user) => {
 
 createNewUser('dogPerson123', 'abc')
 createNewUser('catsRule678', 'abc')
-console.log(users)
+// console.log(users)
 
 const attempt1 = authenticate('abc', users[0]);
 const attempt2 = authenticate('abc', users[1]);
-console.log('attempt1 is valid:', attempt1);
-console.log('attempt2 is valid:', attempt2);
+// console.log('attempt1 is valid:', attempt1);
+// console.log('attempt2 is valid:', attempt2);

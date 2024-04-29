@@ -8,6 +8,9 @@ const hashPassword = async (password, saltRounds = 8) => {
   }
 };
 
+// hashPassword('hello').then((pw) => console.log(pw))
+// hashPassword('ashdjgkjdkfjkdsjl').then((pw) => console.log(pw))
+
 const isValidPassword = async (password, hash) => {
   try {
     return bcrypt.compare(password, hash);
@@ -35,9 +38,9 @@ const tester = async (plainTextPassword, saltRounds = 8, shouldMatch = true) => 
     : console.log('Bad password:', await isValidPassword(`${plainTextPassword}nope`, hashedPassword));
 };
 
-tester('hello123');
-tester('password', 5);
-tester('broken', 10, false);
+// tester('hello123');
+// tester('password', 5);
+// tester('broken', 10, false);
 
 // For more info, see:
 // https://blog.logrocket.com/password-hashing-node-js-bcrypt

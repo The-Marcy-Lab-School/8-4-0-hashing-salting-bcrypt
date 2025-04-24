@@ -12,6 +12,7 @@ const validatePassword = (passwordToTest, storedHash) => {
   return simpleHash(passwordToTest) === storedHash;
 }
 
+// the stored password
 const hashedPassword = simpleHash("abc");  // 979899
 
 console.log(validatePassword("xyz", hashedPassword));

@@ -14,3 +14,17 @@ const testHashing = async (password) => {
 }
 
 testHashing();
+
+
+// Make an async wrapper function so we can use await
+const testSalting = async (password) => {
+  const salt = '$2b$10$abcdefghijlkmnopqrstuv';
+
+  // bcrypt.hash can also take in a salt value
+  console.log(await bcrypt.hash('secret', salt));
+  console.log(await bcrypt.hash('secret', salt));
+
+  // The same hash is made with the same salt!
+}
+
+// testSalting();

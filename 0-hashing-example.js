@@ -2,6 +2,7 @@
 const simpleHash = (str) => {
   let hash = '';
   for (let i = 0; i < str.length; i++) {
+    // converts each character to a number (a => 97, b => 98, etc...)
     hash += str.charCodeAt(i);
   }
   return hash;
